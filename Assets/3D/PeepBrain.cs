@@ -41,6 +41,14 @@ namespace In3D
             }
         }
 
+        float mDistanceCovered = 0.0f;
+
+        public  float   DistanceCovered {
+            get {
+                return mDistanceCovered;
+            }
+        }
+
         public float SeeDistance = 3.0f;
 
         bool mSeeGround = false;
@@ -56,10 +64,12 @@ namespace In3D
             mMR = GetComponent<MeshRenderer>();
             mCC = GetComponent<CharacterController>();
             mWalkLayer = 1 << LayerMask.NameToLayer("WalkOn");
+            transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         }
 
         public void Init() {
             mTimeAlive = 0.0f;
+            mDistanceCovered = 0.0f;
             mIsAlive = true;
             mDNA = new DNA(DNALenght);
         }
@@ -79,6 +89,13 @@ namespace In3D
             mCP.enabled = mCC.enabled = false; //Turn off all the scripts other than Brain
         }
 
+        public  float   Fitness {
+            get {
+                if (!IsAlive) return 0.0f;      //If Dead no fit for anything
+                return TimeAlive + DistanceCovered * 5.0f;  //Fitness Weighted to walking
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -96,6 +113,7 @@ namespace In3D
             switch(mDNA.GetGene(vGene)) {
                 case    DNA.Gene.Forward:
                     mCP.Move(Speed);
+                    mDistanceCovered += 1.0f;
                     break;
                 case    DNA.Gene.TurnLeft:
                     mCP.Turn(Angle);

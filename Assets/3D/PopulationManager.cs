@@ -13,6 +13,7 @@ namespace In3D
         [Range(1,200)]
         public int PopulationSize = 30;
 
+
         List<PeepBrain> mPeeps=new List<PeepBrain>();
 
         int Generation = 0;
@@ -84,8 +85,12 @@ namespace In3D
             return tBrain;
         }
 
+        List<PeepBrain> SortFittest() {
+            return mPeeps.OrderByDescending(o => o.Fitness).ToList();
+        }
+
         void    BreedNewGeneration() {
-            List<PeepBrain> tSortedList = mPeeps.OrderByDescending(o => o.TimeAlive).ToList();
+            List<PeepBrain> tSortedList = SortFittest();
             mPeeps.Clear();
             for (int i = 0; i < tSortedList.Count / 2;i++) {
                 mPeeps.Add(Breed(tSortedList[i], tSortedList[i + 1]));
