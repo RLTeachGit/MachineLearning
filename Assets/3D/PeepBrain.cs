@@ -130,7 +130,7 @@ namespace In3D
         {
             RaycastHit tRayHit;
             mSeeGround = false;
-            if (Physics.Raycast(Eyes.transform.position, Eyes.transform.forward, out tRayHit, SeeDistance))
+            if (Physics.Raycast(Eyes.transform.position, Eyes.transform.forward, out tRayHit, SeeDistance,mWalkLayer))
             {
                 Debug.DrawRay(Eyes.transform.position, Eyes.transform.forward * SeeDistance, Color.green);
                 mSeeGround = true;

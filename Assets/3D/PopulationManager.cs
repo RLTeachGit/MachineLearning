@@ -10,7 +10,7 @@ namespace In3D
 
         public  GameObject PeepPrefab;
 
-        [Range(1,200)]
+        [Range(1,1000)]
         public int PopulationSize = 30;
 
 
@@ -92,9 +92,15 @@ namespace In3D
         void    BreedNewGeneration() {
             List<PeepBrain> tSortedList = SortFittest();
             mPeeps.Clear();
-            for (int i = 0; i < tSortedList.Count / 2;i++) {
+            for (int i = 0; i < Mathf.Min(tSortedList.Count,PopulationSize) / 2;i++) {
                 mPeeps.Add(Breed(tSortedList[i], tSortedList[i + 1]));
                 mPeeps.Add(Breed(tSortedList[i+1], tSortedList[i]));
+            }
+            if(tSortedList.Count<PopulationSize) {      //If population count has changed add more random ones
+                int tAddMore = PopulationSize - tSortedList.Count;
+                while(tAddMore-->0) {
+                    mPeeps.Add(NewBrain());
+                }
             }
             foreach(PeepBrain tBrain in tSortedList) {
                 Destroy(tBrain.gameObject);
