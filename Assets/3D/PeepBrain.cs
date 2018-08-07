@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using MyPhysics;
+
 namespace In3D
 {
     [RequireComponent(typeof(CharacterPhysics))]
@@ -76,8 +78,7 @@ namespace In3D
 
         private void OnTriggerEnter(Collider vOther)
         {
-            if (vOther.gameObject.tag == "Death")
-            {
+            if (vOther.gameObject.tag == "Death") {
                 Die();
             }
         }

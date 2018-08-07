@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace In3D
+namespace MyPhysics
 {
     [RequireComponent(typeof(CharacterController))]
     public class CharacterPhysics : MonoBehaviour
