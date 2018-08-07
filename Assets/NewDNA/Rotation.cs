@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NewDNA
 {
-    public class Movement : Gene
+    public class Rotation : Gene
     {
         protected   float mSpeed;
 
@@ -13,36 +13,36 @@ namespace NewDNA
         {
             get
             {
-                return "Movement";
+                return "Rotation";
             }
         }
 
 
         public override Gene Clone() {
-            Movement tClone = new Movement(((Movement)this).mSpeed);
+            Rotation tClone = new Rotation(((Rotation)this).mSpeed);
             return tClone;
         }
 
 
-        public Movement(float vSpeed) {
+        public Rotation(float vSpeed) {
             mSpeed = vSpeed;
         }
 
-        public Movement() {
+        public Rotation() {
             mSpeed = RandomSpeed();
         }
 
         float   RandomSpeed() {
-            return Random.Range(1.0f, 10.0f);
+            return Random.Range(-360.0f, 360.0f);
         }
 
         public override void Process(Brain vBrain) {
-            vBrain.SetMovement(mSpeed);
+            vBrain.SetRotation(mSpeed);
         }
 
         public override Gene Combine(Gene vOther) {
             Debug.Assert(vOther.GetType() == GetType(),"Illegal EyeGene Combine");
-            if (Chance(MutationRate)) return new Movement();  //Random Mutation
+            if (Chance(MutationRate)) return new Rotation();  //Random Mutation
             return Chance(50.0f) ? Clone() : vOther.Clone();
         }
     }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Death
+  - Blocker
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - PostProcessing
   - WalkOn
   - Peep
-  - 
+  - Block
   - 
   - 
   - 

@@ -59,7 +59,7 @@ namespace NewDNA
 
         public override Gene Combine(Gene vOther) {
             Debug.Assert(vOther.GetType() == typeof(EyeColour),"Illegal EyeGene Combine");
-            if (Chance(10.0f)) return new EyeColour();  //Random Mutation
+            if (Chance(MutationRate)) return new EyeColour();  //Random Mutation
             return new EyeColour(Color.Lerp(mColour, ((EyeColour)vOther).mColour, Random.Range(0.0f, 1.0f)));
         }
     }

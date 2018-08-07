@@ -5,13 +5,18 @@ using UnityEngine;
 namespace NewDNA {
 
 
-    public abstract class Gene 
-    {
-        protected   DNA mDNA;
+    public abstract class Gene {
+        protected DNA mDNA;
 
-        public virtual string  TypeName {
+        public virtual string TypeName {
             get {
                 return "Gene";
+            }
+        }
+
+        protected virtual float MutationRate {
+            get {
+                return  BotManager.MutationRate;   //Low rate of mutations
             }
         }
 

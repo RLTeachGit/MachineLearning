@@ -26,7 +26,7 @@ namespace NewDNA
         private MeshRenderer mMR;
         private CharacterController mCC;
 
-        private LayerMask mWalkLayer;
+        private LayerMask mCanSeeLayer;
 
         private float mSpeed;
 
@@ -34,10 +34,12 @@ namespace NewDNA
         private bool mSuspend;
 
         private bool mSeeGround=true;
+        private bool mBlocked = true;
 
         float   mTimeAlive = 0.0f;
         float   mDistanceWalked = 0.0f;
         float   mDistanceFromStart = 0.0f;
+        float   mRotateSpeed = 90.0f;
         Vector3 mStartPosition;
 
         private float mViewDistance = 10.0f;
@@ -64,7 +66,8 @@ namespace NewDNA
             mCollider = GetComponent<Collider>();
             mMR = GetComponent<MeshRenderer>();
             mCC = GetComponent<CharacterController>();
-            mWalkLayer = 1 << LayerMask.NameToLayer("WalkOn");
+            mCanSeeLayer    = 1 << LayerMask.NameToLayer("WalkOn");
+            mCanSeeLayer    |= 1 << LayerMask.NameToLayer("Block");
             transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         }
 
@@ -75,6 +78,7 @@ namespace NewDNA
             mDNA.AddGene(new Movement());
             mDNA.AddGene(new Sight());
             mDNA.AddGene(new EyeAngle());
+            mDNA.AddGene(new Rotation());
 
             mDNA.Process(this);
 
@@ -121,6 +125,10 @@ namespace NewDNA
             mSpeed = vSpeed;
         }
 
+        public void SetRotation(float vSpeed) {
+            mRotateSpeed = vSpeed;
+        }
+
         public  void    SetViewDistance(float vDistance) {
             mViewDistance = vDistance;
         }
@@ -128,6 +136,7 @@ namespace NewDNA
         public  void    SetEyeAngle(float vAngle) {
             Eyes.transform.localRotation = Quaternion.Euler(vAngle, 0, 0);
         }
+
 
         // Update is called once per frame
         void Update() {
@@ -151,17 +160,26 @@ namespace NewDNA
         {
             RaycastHit tRayHit;
             mSeeGround = false;
-            if (Physics.SphereCast(Eyes.transform.position,0.5f,Eyes.transform.forward, out tRayHit, mViewDistance, mWalkLayer))
+            mBlocked = false;
+            if (Physics.SphereCast(Eyes.transform.position,0.5f,Eyes.transform.forward, out tRayHit, mViewDistance, mCanSeeLayer))
             {
-                Debug.DrawRay(Eyes.transform.position, Eyes.transform.forward * mViewDistance, Color.green);
-                mSeeGround = true;
+                if(tRayHit.collider.tag == "Blocker") {
+                    mBlocked = true;
+                    Debug.DrawRay(Eyes.transform.position, Eyes.transform.forward * mViewDistance, Color.yellow);
+                } else if(tRayHit.collider.tag == "Ground") {
+                    mSeeGround = true;
+                    Debug.DrawRay(Eyes.transform.position, Eyes.transform.forward * mViewDistance, Color.green);
+                }
             } else {
                 Debug.DrawRay(Eyes.transform.position, Eyes.transform.forward * mViewDistance, Color.red);
             }
         }
 
         void    DoMove() {
-            if(mSeeGround) mCP.Move(mSpeed);
+            mCP.Move(mSpeed);
+            if (!mSeeGround || mBlocked) {
+                mCP.Turn(mRotateSpeed);
+            }
         }
     }
 }

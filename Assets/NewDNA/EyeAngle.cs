@@ -39,6 +39,7 @@ namespace NewDNA
 
         public override Gene Combine(Gene vOther) {
             Debug.Assert(vOther.GetType() == GetType(),"Illegal EyeGene Combine");
+            if (Chance(MutationRate)) return new EyeAngle();
             return Chance(50.0f) ? Clone() : vOther.Clone();
         }
     }

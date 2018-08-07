@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/NewDNA/GeneBot.unity
+    guid: 302d2c7a305084ce699e6b5241b2e4c4
   m_configObjects: {}

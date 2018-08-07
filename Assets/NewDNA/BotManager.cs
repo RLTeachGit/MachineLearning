@@ -15,6 +15,14 @@ namespace NewDNA
         [Range(1, 1000)]
         public int PopulationSize = 30;
 
+        public float mMutationRate = 1.0f;
+
+        public static float MutationRate {
+            get {
+                return Singleton.mMutationRate;
+            }
+        }
+
 
         List<Brain> mBots = new List<Brain>();
 
@@ -29,9 +37,15 @@ namespace NewDNA
         {
             mGUIStyle.fontSize = 10;
             mGUIStyle.normal.textColor = Color.white;
-            GUI.Label(new Rect(10, 10, 100, 20), "Generation:" + Generation, mGUIStyle);
-            GUI.Label(new Rect(10, 35, 100, 20), string.Format("Alive:{0}", mBots.Where(o => o.IsAlive).Count()), mGUIStyle);
-            GUI.Label(new Rect(10, 65, 100, 20), string.Format("Time:{0:f2}", TimeAlive), mGUIStyle);
+            int yPos = 10;
+            GUI.Label(new Rect(10, yPos+=20, 100, 20), "Generation:" + Generation, mGUIStyle);
+            GUI.Label(new Rect(10, yPos += 20, 100, 20), string.Format("Alive:{0}", mBots.Where(o => o.IsAlive).Count()), mGUIStyle);
+            GUI.Label(new Rect(10, yPos += 20, 100, 20), string.Format("Time:{0:f2}", TimeAlive), mGUIStyle);
+            TimeLimit = (int)GUI.HorizontalSlider(new Rect(10, yPos += 30, 100, 30), TimeLimit, 0.0f, 100.0f);
+            mMutationRate = GUI.HorizontalSlider(new Rect(10, yPos += 30, 100, 30), mMutationRate, 0.0f, 100.0f);
+            PopulationSize = (int)GUI.HorizontalSlider(new Rect(10, yPos += 30, 100, 30), PopulationSize, 10, 500);
+            GUI.Label(new Rect(10, yPos += 20, 200, 20), string.Format("TTL:{0:d} Mutation Rate {1:f2} Next Pop {2:d}", (int)TimeLimit,MutationRate,PopulationSize), mGUIStyle);
+
             int tAliveCount = mBots.Where(o => o.IsAlive).Count();
 
         }
@@ -124,7 +138,7 @@ namespace NewDNA
             foreach(Brain tBrain in mBots) {
                 tBrain.Suspend = false;
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
             if (tSortedList.Count < PopulationSize) {      //If population count has changed add more random ones
                 int tAddMore = PopulationSize - tSortedList.Count;
                 while (tAddMore-- > 0) {
